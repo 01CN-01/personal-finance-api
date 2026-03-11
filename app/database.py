@@ -1,15 +1,12 @@
 import sqlite3
-import uuid
-
-
-
-user_UUID = str(uuid.uuid4())
+from app.models.user import RegisterCreate
 
 def get_connection():
     conn = sqlite3.connect("data/finance.db")
     conn.row_factory = sqlite3.Row
+    return conn
     
-# ------ USER ------
+
 def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
@@ -28,23 +25,40 @@ def create_tables():
     
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXITS categories(
-            ID INTEGER PRIMARY KEY AUTOINCREMENT
+        CREATE TABLE IF NOT EXISTS categories(
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
             category TEXT UNIQUE NOT NULL
         )
         """)
     
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXITS  transactions(
+        CREATE TABLE IF NOT EXISTS  transactions(
         UUID TEXT PRIMARY KEY,
         user_UUID TEXT UNIQUE NOT NULL,
         category_id TEXT NOT NULL,
         description TEXT,
-        amount REAL, NOT NULL,
+        amount REAL NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
         """)
     
     conn.commit()
     conn.close
+
+# AUTHENTICATION ------
+def create_account(user_UUID, first_name, last_name, email, hashed_password):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO users(UUID, first_name, last_name, email, encrypted_password)
+        VALUES(?, ?, ?, ?, ?)
+        """,
+        (user_UUID, first_name, last_name, email, hashed_password)
+    )
+
+    conn.commit()
+    conn.close()
+
