@@ -1,0 +1,72 @@
+Personal Finance API – Build Plan
+
+1️⃣ Project Setup
+Create the FastAPI project ✅ 
+Create the SQLite database ✅
+Set up the database connection (conn) ✅
+Confirm the API runs and routes work ✅
+Goal: API can run and connect to the database.
+
+2️⃣ User System
+Create users table
+           |                           |                           |                         |                                   |                                      |
+UUID(TEXT, PRIMARY KEY), first_name(TEXT, NOT NULL), last_name(TEXT, NOT NULL), email(TEXT,UNIQUE, NOT NULL), encrypted_password(TEXT, NOT NULL), created_at(TEXT, DEFAULT, CURRENT_TIMESTAMP)
+
+Implement user registration
+Implement password hashing
+Implement login
+Generate JWT token on login
+Goal: users can register and log in.
+
+3️⃣ Categories System
+Create categories table
+                    |                            |
+ID(INTEGER, PRIMARY KEY, AUTOINCREMENT), name(TEXT, UNIQUE, NOT NULL)
+
+Link categories to users
+Allow users to create categories
+Allow users to retrieve their categories
+Goal: users organise spending into categories.
+
+4️⃣ Transactions System
+Create transactions table
+          |                           |                           |                      |                     |                               |
+UUID(TEXT, PRIMARY KEY), user_UUID(TEXT, NOT NULL), category_id(TEXT, NOT NULL), description(TEXT), amount(REAL, NOT NULL), created_at(TEXT DEFAULT CURRENT_TIMESTAMP)
+
+Link transactions to users
+Link transactions to categories
+Allow users to create transactions
+Allow users to retrieve their transactions
+Allow users to delete transactions
+Goal: core finance tracking works.
+
+5️⃣ Filtering
+Allow filtering transactions by:
+category
+transaction type (income / expense)
+date
+Goal: flexible transaction retrieval.
+
+6️⃣ Data Relationships
+Use SQL joins
+Return useful information instead of raw IDs
+Improve response structure
+Goal: API responses are meaningful.
+
+7️⃣ Analytics
+Endpoint for total spending
+Endpoint for category summaries
+Endpoint for monthly summaries
+Goal: provide financial insights.
+
+8️⃣ Pagination
+Add limit / offset to transaction endpoints
+Prevent very large responses
+Goal: production-style API behaviour.
+
+9️⃣ Final Improvements
+Add input validation
+Improve error handling
+Clean project structure
+Write README
+Test all endpoints
