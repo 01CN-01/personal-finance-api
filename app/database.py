@@ -62,3 +62,15 @@ def create_account(user_UUID, first_name, last_name, email, hashed_password):
     conn.commit()
     conn.close()
 
+def get_user_by_email(email):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        """
+        SELECT * FROM users WHERE email = ?
+        """,(
+            email,))
+    
+    return cursor.fetchone()
+

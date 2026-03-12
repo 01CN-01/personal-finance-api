@@ -5,21 +5,20 @@ Create the FastAPI project ✅
 Create the SQLite database ✅
 Set up the database connection (conn) ✅
 Confirm the API runs and routes work ✅
-Goal: API can run and connect to the database.
+Goal: API can run and connect to the database.✅
 
 2️⃣ User System
-Create users table
+Create users table✅
            |                           |                           |                         |                                   |                                      |
 UUID(TEXT, PRIMARY KEY), first_name(TEXT, NOT NULL), last_name(TEXT, NOT NULL), email(TEXT,UNIQUE, NOT NULL), encrypted_password(TEXT, NOT NULL), created_at(TEXT, DEFAULT, CURRENT_TIMESTAMP)
 
-Implement user registration
-Implement password hashing
-Implement login
-Generate JWT token on login
-Goal: users can register and log in.
+Implement user registration✅
+Implement password hashing✅
+Implement login✅
+Goal: users can register and log in.✅
 
 3️⃣ Categories System
-Create categories table
+Create categories table✅
                     |                            |
 ID(INTEGER, PRIMARY KEY, AUTOINCREMENT), name(TEXT, UNIQUE, NOT NULL)
 
@@ -29,7 +28,7 @@ Allow users to retrieve their categories
 Goal: users organise spending into categories.
 
 4️⃣ Transactions System
-Create transactions table
+Create transactions table✅
           |                           |                           |                      |                     |                               |
 UUID(TEXT, PRIMARY KEY), user_UUID(TEXT, NOT NULL), category_id(TEXT, NOT NULL), description(TEXT), amount(REAL, NOT NULL), created_at(TEXT DEFAULT CURRENT_TIMESTAMP)
 
