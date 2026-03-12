@@ -1,5 +1,4 @@
 import sqlite3
-from app.models.user import RegisterCreate
 
 def get_connection():
     conn = sqlite3.connect("data/finance.db")
@@ -44,7 +43,7 @@ def create_tables():
         """)
     
     conn.commit()
-    conn.close
+    conn.close()
 
 # AUTHENTICATION ------
 def create_account(user_UUID, first_name, last_name, email, hashed_password):
@@ -74,3 +73,43 @@ def get_user_by_email(email):
     
     return cursor.fetchone()
 
+# TRANSACTIONS ------
+def get_transactions(user_UUID):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        """
+        SELECT
+            t.user_UUID,
+            t.category_id,
+            t.description,
+            t.amount,
+            t.created_at,
+            c.category
+        FROM
+            transactions t
+        JOIN 
+            categories c ON t.category_id = c.id
+        WHERE
+            t.user_UUID = ?
+        """,(
+            user_UUID
+        ))
+    
+    conn.close()
+
+def make_category(category):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        """
+        INSERT INTO categories(category)
+        VALUES (?)
+        """,(
+            category,
+            ))
+    
+    conn.commit()
+    conn.close()
