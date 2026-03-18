@@ -12,7 +12,7 @@ class TransactionResponse(BaseModel):
     category_id: int
     description: str
     amount: float
-    create_at: str 
+    created_at: str 
     
     
 

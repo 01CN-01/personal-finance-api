@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from uuid import uuid4
 from app.models.category import CategoryCreate
 from app.models.transaction import TransactionResponse, TransactionCreate
 from app.database import make_category, get_transactions, get_categories, create_transactions
@@ -20,7 +21,9 @@ def categories():
 
 @finance_router.post("/create-transaction/{user_UUID}")
 def create_transaction(transaction: TransactionCreate):
-    create_transactions(transaction.user_UUID,
+    UUID = str(uuid4())
+    create_transactions(UUID,
+                        transaction.user_UUID,
                         transaction.category_id,
                         transaction.description,
                         transaction.amount)

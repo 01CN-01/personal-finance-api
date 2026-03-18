@@ -76,19 +76,20 @@ def get_user_by_email(email):
     return user
 
 # TRANSACTIONS ------
-def create_transactions(user_UUID, category_id, description, amount):
+def create_transactions(UUID, user_UUID, category_id, description, amount):
     conn = get_connection()
     cursor = conn.cursor()
     
     cursor.execute(
         """
-        INSERT INTO transactions(user_UUID, category_id, description, amount)
+        INSERT INTO transactions(UUID, user_UUID, category_id, description, amount)
         VALUES(?, ?, ?, ?, ?)
         """,(
-           user_UUID,
-           category_id,
-           description,
-           amount
+            UUID,
+            user_UUID,
+            category_id,
+            description,
+            amount,
         ))
     conn.commit()
     conn.close()
@@ -103,6 +104,7 @@ def get_transactions(user_UUID):
     cursor.execute(
         """
         SELECT
+            t.UUID as transaction_UUID,
             t.user_UUID,
             t.category_id,
             t.description,
@@ -121,7 +123,11 @@ def get_transactions(user_UUID):
     transactions = cursor.fetchall()
     conn.close()
     
-    return transactions
+    results = []
+    for row in transactions:
+        results.append(dict(row))
+        
+    return results
     
 # CATEGORIES ------
 def make_category(category):
