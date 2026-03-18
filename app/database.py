@@ -1,7 +1,7 @@
 import sqlite3
 
 def get_connection():
-    conn = sqlite3.connect("data/finance.db")
+    conn = sqlite3.connect("data/finance.db", timeout=10)
     conn.row_factory = sqlite3.Row
     return conn
     
@@ -32,10 +32,10 @@ def create_tables():
     
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS  transactions(
+        CREATE TABLE IF NOT EXISTS transactions(
         UUID TEXT PRIMARY KEY,
-        user_UUID TEXT UNIQUE NOT NULL,
-        category_id TEXT NOT NULL,
+        user_UUID TEXT NOT NULL,
+        category_id INTEGER NOT NULL,
         description TEXT,
         amount REAL NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
@@ -70,10 +70,32 @@ def get_user_by_email(email):
         SELECT * FROM users WHERE email = ?
         """,(
             email,))
+    user = cursor.fetchone()
+    conn.close()
     
-    return cursor.fetchone()
+    return user
 
 # TRANSACTIONS ------
+def create_transactions(user_UUID, category_id, description, amount):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        """
+        INSERT INTO transactions(user_UUID, category_id, description, amount)
+        VALUES(?, ?, ?, ?, ?)
+        """,(
+           user_UUID,
+           category_id,
+           description,
+           amount
+        ))
+    conn.commit()
+    conn.close()
+
+def delete_transaction(): # Finish
+    print("continue")
+    
 def get_transactions(user_UUID):
     conn = get_connection()
     cursor = conn.cursor()
@@ -90,26 +112,46 @@ def get_transactions(user_UUID):
         FROM
             transactions t
         JOIN 
-            categories c ON t.category_id = c.id
+            categories c ON t.category_id = c.ID
         WHERE
             t.user_UUID = ?
         """,(
-            user_UUID
+            user_UUID,
         ))
-    
+    transactions = cursor.fetchall()
     conn.close()
-
+    
+    return transactions
+    
+# CATEGORIES ------
 def make_category(category):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            INSERT INTO categories(category)
+            VALUES (?)
+            """,(
+                category,
+                ))
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+
+def get_categories(): # Dropdown menu
     conn = get_connection()
     cursor = conn.cursor()
     
     cursor.execute(
         """
-        INSERT INTO categories(category)
-        VALUES (?)
-        """,(
-            category,
-            ))
-    
-    conn.commit()
+        SELECT * FROM categories
+        """)
+    categories = cursor.fetchall()
     conn.close()
+    
+    return categories
+

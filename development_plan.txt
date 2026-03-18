@@ -22,10 +22,10 @@ Create categories table✅
                     |                            |
 ID(INTEGER, PRIMARY KEY, AUTOINCREMENT), name(TEXT, UNIQUE, NOT NULL)
 
-Link categories to users
-Allow users to create categories
-Allow users to retrieve their categories
-Goal: users organise spending into categories.
+Link categories to users✅
+Allow users to create categories✅
+Allow users to retrieve their categories✅
+Goal: users organise spending into categories.✅
 
 4️⃣ Transactions System
 Create transactions table✅

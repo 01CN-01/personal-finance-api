@@ -8,9 +8,6 @@ auth_router = APIRouter(prefix = "/auth")
 
 @auth_router.post("/register")
 def register(register: RegisterCreate):
-    print("PASSWORD VALUE:", register.password)
-    print("PASSWORD LENGTH:", len(register.password))
-
     hashed_password = hash_password(register.password)
     
     user_UUID = str(uuid4())
@@ -35,7 +32,7 @@ def login(login: LoginCreate):
         raise HTTPException(status_code=401, detail="Invalid Credentials")
     
     return {
-        "user_UUID": user["UUID"],
+        "user_UUID": user["user_UUID"], #
         "first_name": user["first_name"],
         "last_name": user["last_name"],
         "email": user["email"]
