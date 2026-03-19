@@ -94,8 +94,27 @@ def create_transactions(UUID, user_UUID, category_id, description, amount):
     conn.commit()
     conn.close()
 
-def delete_transaction(): # Finish
-    print("continue")
+def delete_transaction(UUID, user_UUID): # Deletes but deletes stuff if they both dont match for some reason (FINISH)
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        """
+        DELETE FROM transactions 
+        WHERE 
+            UUID = ? 
+            AND 
+            user_UUID = ?
+        """,(
+            UUID,
+            user_UUID
+        ))
+    
+    conn.commit()
+    deleted = cursor.rowcount > 0
+    conn.close()
+    
+    return deleted
     
 def get_transactions(user_UUID):
     conn = get_connection()

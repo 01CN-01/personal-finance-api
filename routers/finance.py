@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from uuid import uuid4
 from app.models.category import CategoryCreate
 from app.models.transaction import TransactionResponse, TransactionCreate
-from app.database import make_category, get_transactions, get_categories, create_transactions
+from app.database import make_category, get_transactions, get_categories, create_transactions, delete_transaction
 finance_router = APIRouter(prefix = "/finance")
 
 @finance_router.post("/create-category")
@@ -36,3 +36,11 @@ def get_transaction(user_UUID: str):
     else:
         raise HTTPException(status_code=404, detail="No transactions found")
 
+@finance_router.delete("/delete-transaction/{UUID}")
+def delete_transactions(UUID: str, user_UUID: str):
+    deleted = delete_transaction(UUID, user_UUID)
+    
+    if deleted:
+        return {"message": "Transaction deleted successfully"}
+    else:
+       return {"message": "Transaction not found"}
